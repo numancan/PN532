@@ -6,7 +6,7 @@
 */
 /**************************************************************************/
 
-#include "Arduino.h"
+#include <stdio.h>
 #include "PN532.h"
 #include "PN532_debug.h"
 #include <string.h>
@@ -34,13 +34,13 @@ void PN532::begin()
     @brief  Prints a hexadecimal value in plain characters
 
     @param  data      Pointer to the uint8_t data
-    @param  numBytes  Data length in bytes
+    @param  numuint8_ts  Data length in uint8_ts
 */
 /**************************************************************************/
-void PN532::PrintHex(const uint8_t *data, const uint32_t numBytes)
+void PN532::PrintHex(const uint8_t *data, const uint32_t numuint8_ts)
 {
 #ifdef ARDUINO
-    for (uint8_t i = 0; i < numBytes; i++) {
+    for (uint8_t i = 0; i < numuint8_ts; i++) {
         if (data[i] < 0x10) {
             SERIAL.print(" 0");
         } else {
@@ -50,7 +50,7 @@ void PN532::PrintHex(const uint8_t *data, const uint32_t numBytes)
     }
     SERIAL.println("");
 #else
-    for (uint8_t i = 0; i < numBytes; i++) {
+    for (uint8_t i = 0; i < numuint8_ts; i++) {
         printf(" %2X", data[i]);
     }
     printf("\n");
@@ -65,13 +65,13 @@ void PN532::PrintHex(const uint8_t *data, const uint32_t numBytes)
             00 00 00 00 00 00  ......
 
     @param  data      Pointer to the data
-    @param  numBytes  Data length in bytes
+    @param  numuint8_ts  Data length in uint8_ts
 */
 /**************************************************************************/
-void PN532::PrintHexChar(const uint8_t *data, const uint32_t numBytes)
+void PN532::PrintHexChar(const uint8_t *data, const uint32_t numuint8_ts)
 {
 #ifdef ARDUINO
-    for (uint8_t i = 0; i < numBytes; i++) {
+    for (uint8_t i = 0; i < numuint8_ts; i++) {
         if (data[i] < 0x10) {
             SERIAL.print(" 0");
         } else {
@@ -80,7 +80,7 @@ void PN532::PrintHexChar(const uint8_t *data, const uint32_t numBytes)
         SERIAL.print(data[i], HEX);
     }
     SERIAL.print("    ");
-    for (uint8_t i = 0; i < numBytes; i++) {
+    for (uint8_t i = 0; i < numuint8_ts; i++) {
         char c = data[i];
         if (c <= 0x1f || c > 0x7f) {
             SERIAL.print('.');
@@ -90,11 +90,11 @@ void PN532::PrintHexChar(const uint8_t *data, const uint32_t numBytes)
     }
     SERIAL.println("");
 #else
-    for (uint8_t i = 0; i < numBytes; i++) {
+    for (uint8_t i = 0; i < numuint8_ts; i++) {
         printf(" %2X", data[i]);
     }
     printf("    ");
-    for (uint8_t i = 0; i < numBytes; i++) {
+    for (uint8_t i = 0; i < numuint8_ts; i++) {
         char c = data[i];
         if (c <= 0x1f || c > 0x7f) {
             printf(".");
@@ -185,7 +185,7 @@ uint32_t PN532::readRegister(uint16_t reg)
 /**************************************************************************/
 uint32_t PN532::writeRegister(uint16_t reg, uint8_t val)
 {
-    uint32_t response;
+    // uint32_t response;
 
     pn532_packetbuffer[0] = PN532_COMMAND_WRITEREGISTER;
     pn532_packetbuffer[1] = (reg >> 8) & 0xFF;
@@ -274,7 +274,7 @@ uint8_t PN532::readGPIO(void)
 
     /* READGPIO response without prefix and suffix should be in the following format:
 
-      byte            Description
+      uint8_t            Description
       -------------   ------------------------------------------
       b0              P3 GPIO Pins
       b1              P7 GPIO Pins (not used ... taken by I2C)
@@ -409,7 +409,7 @@ bool PN532::startPassiveTargetIDDetection(uint8_t cardbaudrate) {
 
     @param  cardBaudRate  Baud rate of the card
     @param  uid           Pointer to the array that will be populated
-                          with the card's UID (up to 7 bytes)
+                          with the card's UID (up to 7 uint8_ts)
     @param  uidLength     Pointer to the variable that will hold the
                           length of the card's UID.
     @param  timeout       The number of tries before timing out
@@ -436,7 +436,7 @@ bool PN532::readPassiveTargetID(uint8_t cardbaudrate, uint8_t *uid, uint8_t *uid
     // check some basic stuff
     /* ISO14443A card response should be in the following format:
 
-      byte            Description
+      uint8_t            Description
       -------------   ------------------------------------------
       b0              Tags Found
       b1              Tag Number (only one used in this example)
@@ -509,14 +509,14 @@ bool PN532::mifareclassic_IsTrailerBlock (uint32_t uiBlock)
     INDATAEXCHANGE command.  See section 7.3.8 of the PN532 User Manual
     for more information on sending MIFARE and other commands.
 
-    @param  uid           Pointer to a byte array containing the card UID
-    @param  uidLen        The length (in bytes) of the card's UID (Should
+    @param  uid           Pointer to a uint8_t array containing the card UID
+    @param  uidLen        The length (in uint8_ts) of the card's UID (Should
                           be 4 for MIFARE Classic)
     @param  blockNumber   The block number to authenticate.  (0..63 for
                           1KB cards, and 0..255 for 4KB cards).
     @param  keyNumber     Which key type to use during authentication
                           (0 = MIFARE_CMD_AUTH_A, 1 = MIFARE_CMD_AUTH_B)
-    @param  keyData       Pointer to a byte array containing the 6 bytes
+    @param  keyData       Pointer to a uint8_t array containing the 6 uint8_ts
                           key value
 
     @returns 1 if everything executed properly, 0 for an error
@@ -538,7 +538,7 @@ uint8_t PN532::mifareclassic_AuthenticateBlock (uint8_t *uid, uint8_t uidLen, ui
     pn532_packetbuffer[3] = blockNumber;                    /* Block Number (1K = 0..63, 4K = 0..255 */
     memcpy (pn532_packetbuffer + 4, _key, 6);
     for (i = 0; i < _uidLen; i++) {
-        pn532_packetbuffer[10 + i] = _uid[i];              /* 4 bytes card ID */
+        pn532_packetbuffer[10 + i] = _uid[i];              /* 4 uint8_ts card ID */
     }
 
     if (HAL(writeCommand)(pn532_packetbuffer, 10 + _uidLen))
@@ -548,8 +548,8 @@ uint8_t PN532::mifareclassic_AuthenticateBlock (uint8_t *uid, uint8_t uidLen, ui
     HAL(readResponse)(pn532_packetbuffer, sizeof(pn532_packetbuffer));
 
     // Check if the response is valid and we are authenticated???
-    // for an auth success it should be bytes 5-7: 0xD5 0x41 0x00
-    // Mifare auth error is technically byte 7: 0x14 but anything other and 0x00 is not good
+    // for an auth success it should be uint8_ts 5-7: 0xD5 0x41 0x00
+    // Mifare auth error is technically uint8_t 7: 0x14 but anything other and 0x00 is not good
     if (pn532_packetbuffer[0] != 0x00) {
         DMSG("Authentification failed\n");
         return 0;
@@ -560,12 +560,12 @@ uint8_t PN532::mifareclassic_AuthenticateBlock (uint8_t *uid, uint8_t uidLen, ui
 
 /**************************************************************************/
 /*!
-    Tries to read an entire 16-bytes data block at the specified block
+    Tries to read an entire 16-uint8_ts data block at the specified block
     address.
 
     @param  blockNumber   The block number to authenticate.  (0..63 for
                           1KB cards, and 0..255 for 4KB cards).
-    @param  data          Pointer to the byte array that will hold the
+    @param  data          Pointer to the uint8_t array that will hold the
                           retrieved data (if any)
 
     @returns 1 if everything executed properly, 0 for an error
@@ -573,7 +573,7 @@ uint8_t PN532::mifareclassic_AuthenticateBlock (uint8_t *uid, uint8_t uidLen, ui
 /**************************************************************************/
 uint8_t PN532::mifareclassic_ReadDataBlock (uint8_t blockNumber, uint8_t *data)
 {
-    DMSG("Trying to read 16 bytes from block ");
+    DMSG("Trying to read 16 uint8_ts from block ");
     DMSG_INT(blockNumber);
 
     /* Prepare the command */
@@ -590,13 +590,13 @@ uint8_t PN532::mifareclassic_ReadDataBlock (uint8_t blockNumber, uint8_t *data)
     /* Read the response packet */
     HAL(readResponse)(pn532_packetbuffer, sizeof(pn532_packetbuffer));
 
-    /* If byte 8 isn't 0x00 we probably have an error */
+    /* If uint8_t 8 isn't 0x00 we probably have an error */
     if (pn532_packetbuffer[0] != 0x00) {
         return 0;
     }
 
-    /* Copy the 16 data bytes to the output buffer        */
-    /* Block content starts at byte 9 of a valid response */
+    /* Copy the 16 data uint8_ts to the output buffer        */
+    /* Block content starts at uint8_t 9 of a valid response */
     memcpy (data, pn532_packetbuffer + 1, 16);
 
     return 1;
@@ -604,12 +604,12 @@ uint8_t PN532::mifareclassic_ReadDataBlock (uint8_t blockNumber, uint8_t *data)
 
 /**************************************************************************/
 /*!
-    Tries to write an entire 16-bytes data block at the specified block
+    Tries to write an entire 16-uint8_ts data block at the specified block
     address.
 
     @param  blockNumber   The block number to authenticate.  (0..63 for
                           1KB cards, and 0..255 for 4KB cards).
-    @param  data          The byte array that contains the data to write.
+    @param  data          The uint8_t array that contains the data to write.
 
     @returns 1 if everything executed properly, 0 for an error
 */
@@ -756,10 +756,10 @@ uint8_t PN532::mifareclassic_WriteNDEFURI (uint8_t sectorNumber, uint8_t uriIden
 
 /**************************************************************************/
 /*!
-    Tries to read an entire 4-bytes page at the specified address.
+    Tries to read an entire 4-uint8_ts page at the specified address.
 
     @param  page        The page number (0..63 in most cases)
-    @param  buffer      Pointer to the byte array that will hold the
+    @param  buffer      Pointer to the uint8_t array that will hold the
                         retrieved data (if any)
 */
 /**************************************************************************/
@@ -779,13 +779,13 @@ uint8_t PN532::mifareultralight_ReadPage (uint8_t page, uint8_t *buffer)
     /* Read the response packet */
     HAL(readResponse)(pn532_packetbuffer, sizeof(pn532_packetbuffer));
 
-    /* If byte 8 isn't 0x00 we probably have an error */
+    /* If uint8_t 8 isn't 0x00 we probably have an error */
     if (pn532_packetbuffer[0] == 0x00) {
-        /* Copy the 4 data bytes to the output buffer         */
-        /* Block content starts at byte 9 of a valid response */
-        /* Note that the command actually reads 16 bytes or 4  */
+        /* Copy the 4 data uint8_ts to the output buffer         */
+        /* Block content starts at uint8_t 9 of a valid response */
+        /* Note that the command actually reads 16 uint8_ts or 4  */
         /* pages at a time ... we simply discard the last 12  */
-        /* bytes                                              */
+        /* uint8_ts                                              */
         memcpy (buffer, pn532_packetbuffer + 1, 4);
     } else {
         return 0;
@@ -797,11 +797,11 @@ uint8_t PN532::mifareultralight_ReadPage (uint8_t page, uint8_t *buffer)
 
 /**************************************************************************/
 /*!
-    Tries to write an entire 4-bytes data buffer at the specified page
+    Tries to write an entire 4-uint8_ts data buffer at the specified page
     address.
 
     @param  page     The page number to write into.  (0..63).
-    @param  buffer   The byte array that contains the data to write.
+    @param  buffer   The uint8_t array that contains the data to write.
 
     @returns 1 if everything executed properly, 0 for an error
 */
@@ -876,7 +876,7 @@ bool PN532::inDataExchange(uint8_t *send, uint8_t sendLength, uint8_t *response,
     between the PN532 and a target.
 
     @param  send            Pointer to the command buffer
-    @param  sendLength      Command length in bytes
+    @param  sendLength      Command length in uint8_ts
     @param  response        Pointer to response data
     @param  responseLength  Pointer to the response data length
 */
@@ -1077,9 +1077,9 @@ int16_t PN532::inRelease(const uint8_t relevantTarget){
                                          00h: No Request
                                          01h: System Code request (to acquire System Code of the card)
                                          02h: Communication perfomance request
-    @param[out] idm                    IDm of the card (8 bytes)
-    @param[out] pmm                    PMm of the card (8 bytes)
-    @param[out] systemCodeResponse     System Code of the card (Optional, 2bytes)
+    @param[out] idm                    IDm of the card (8 uint8_ts)
+    @param[out] pmm                    PMm of the card (8 uint8_ts)
+    @param[out] systemCodeResponse     System Code of the card (Optional, 2uint8_ts)
     @return                            = 1: A FeliCa card has detected
                                        = 0: No card has detected
                                        < 0: error
@@ -1151,7 +1151,7 @@ int8_t PN532::felica_Polling(uint16_t systemCode, uint8_t requestCode, uint8_t *
 
     @param[in]  command         FeliCa command packet. (e.g. 00 FF FF 00 00  for Polling command)
     @param[in]  commandlength   Length of the FeliCa command packet. (e.g. 0x05 for above Polling command )
-    @param[out] response        FeliCa response packet. (e.g. 01 NFCID2(8 bytes) PAD(8 bytes)  for Polling response)
+    @param[out] response        FeliCa response packet. (e.g. 01 NFCID2(8 uint8_ts) PAD(8 uint8_ts)  for Polling response)
     @param[out] responselength  Length of the FeliCa response packet. (e.g. 0x11 for above Polling command )
     @return                          = 1: Success
                                      < 0: error
@@ -1292,7 +1292,7 @@ int8_t PN532::felica_RequestResponse(uint8_t * mode)
     @param[in]  numService         Length of the serviceCodeList
     @param[in]  serviceCodeList    Service Code List (Big Endian)
     @param[in]  numBlock           Length of the blockList
-    @param[in]  blockList          Block List (Big Endian, This API only accepts 2-byte block list element)
+    @param[in]  blockList          Block List (Big Endian, This API only accepts 2-uint8_t block list element)
     @param[out] blockData          Block Data
     @return                        = 1: Success
                                    < 0: error
@@ -1367,8 +1367,8 @@ int8_t PN532::felica_ReadWithoutEncryption (uint8_t numService, const uint16_t *
     @param[in]  numService         Length of the serviceCodeList
     @param[in]  serviceCodeList    Service Code List (Big Endian)
     @param[in]  numBlock           Length of the blockList
-    @param[in]  blockList          Block List (Big Endian, This API only accepts 2-byte block list element)
-    @param[in]  blockData          Block Data (each Block has 16 bytes)
+    @param[in]  blockList          Block List (Big Endian, This API only accepts 2-uint8_t block list element)
+    @param[in]  blockData          Block Data (each Block has 16 uint8_ts)
     @return                        = 1: Success
                                    < 0: error
 */

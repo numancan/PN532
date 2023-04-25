@@ -120,13 +120,13 @@ void loop()
     Serial.println("Didn't find anything!");
   }
 
-  delay(1000);
+  sleep_ms(1000);
 }
 
 void printResponse(uint8_t *response, uint8_t responseLength)
 {
 
-  String respBuffer;
+  std::string respBuffer;
 
   for (int i = 0; i < responseLength; i++)
   {
@@ -134,7 +134,7 @@ void printResponse(uint8_t *response, uint8_t responseLength)
     if (response[i] < 0x10)
       respBuffer = respBuffer + "0"; //Adds leading zeros if hex value is smaller than 0x10
 
-    respBuffer = respBuffer + String(response[i], HEX) + " ";
+    respBuffer = respBuffer + std::string(response[i], HEX) + " ";
   }
 
   Serial.print("response: ");

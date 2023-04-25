@@ -1,6 +1,6 @@
-// NTAG21x supports 4 bytes password to protect pages started from AUTH0
+// NTAG21x supports 4 uint8_ts password to protect pages started from AUTH0
 // AUTH0 defines the page address from which the password verification is required.
-// Valid address range for byte AUTH0 is from 00h to FFh.
+// Valid address range for uint8_t AUTH0 is from 00h to FFh.
 // If AUTH0 is set to a page address which is higher than the last page from the user configuration,
 // the password protection is effectively disabled
 #include <PN532/PN532/PN532.h>
@@ -56,7 +56,7 @@ void loop(void) {
     int capacity = buf[2] * 8;
     Serial.print(F("Tag capacity "));
     Serial.print(capacity);
-    Serial.println(F(" bytes"));
+    Serial.println(F(" uint8_ts"));
 
     uint8_t cfg_page_base = 0x29;   // NTAG213
     if (capacity == 0x3E) {

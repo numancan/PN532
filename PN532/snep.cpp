@@ -76,7 +76,7 @@ int16_t SNEP::read(uint8_t *buf, uint8_t len, uint16_t timeout)
 
 	// check SNEP version
 
-	// in case of platform specific bug, shift SNEP message for 4 bytes.
+	// in case of platform specific bug, shift SNEP message for 4 uint8_ts.
 	// tested on Nexus 5, Android 5.1
 	if (SNEP_DEFAULT_VERSION != buf[0] && SNEP_DEFAULT_VERSION == buf[4])
 	{
@@ -88,10 +88,10 @@ int16_t SNEP::read(uint8_t *buf, uint8_t len, uint16_t timeout)
 
 	if (SNEP_DEFAULT_VERSION != buf[0])
 	{
-		DMSG(F("SNEP->read: The received SNEP message's major version is different, me: "));
-		DMSG(SNEP_DEFAULT_VERSION);
+		DMSG("SNEP->read: The received SNEP message's major version is different, me: ");
+		DMSG_INT(SNEP_DEFAULT_VERSION);
 		DMSG(", their: ");
-		DMSG(buf[0]);
+		DMSG_INT(buf[0]);
 		DMSG("\n");
 		// To-do: send Unsupported Version response
 		return -4;

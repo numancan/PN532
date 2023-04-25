@@ -34,7 +34,7 @@ public:
     int8_t disconnect(uint16_t timeout = LLCP_DEFAULT_TIMEOUT);
 
 	/**
-    * @brief    write a packet, the packet should be less than (255 - 2) bytes
+    * @brief    write a packet, the packet should be less than (255 - 2) uint8_ts
     * @param    header  packet header
     * @param    hlen    length of header
     * @param    body    packet body
@@ -45,7 +45,7 @@ public:
     bool write(const uint8_t *header, uint8_t hlen, const uint8_t *body = 0, uint8_t blen = 0);
 
     /**
-    * @brief    read a  packet, the packet will be less than (255 - 2) bytes
+    * @brief    read a  packet, the packet will be less than (255 - 2) uint8_ts
     * @param    buf     the buffer to contain the packet
     * @param    len     lenght of the buffer
     * @return   >=0     length of the packet 
@@ -55,7 +55,7 @@ public:
 
     uint8_t *getHeaderBuffer(uint8_t *len) {
         uint8_t *buf = link.getHeaderBuffer(len);
-        len -= 3;       // I PDU header has 3 bytes
+        len -= 3;       // I PDU header has 3 uint8_ts
         return buf;
     };
 

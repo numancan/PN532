@@ -38,7 +38,7 @@ void loop()
         Serial.println("Success");
     }
 
-    delay(3000);
+    sleep_ms(3000);
 #else
     Serial.println("Get a message from Android");
     int msgSize = nfc.read(ndefBuf, sizeof(ndefBuf));
@@ -49,6 +49,6 @@ void loop()
     } else {
         Serial.println("failed");
     }
-    delay(3000);
+    sleep_ms(3000);
 #endif
 }

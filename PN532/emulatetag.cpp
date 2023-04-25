@@ -37,8 +37,8 @@
 #define R_APDU_SW1_MEMORY_FAILURE 0x65
 #define R_APDU_SW2_MEMORY_FAILURE 0x81
 
-#define R_APDU_SW1_END_OF_FILE_BEFORE_REACHED_LE_BYTES 0x62
-#define R_APDU_SW2_END_OF_FILE_BEFORE_REACHED_LE_BYTES 0x82
+#define R_APDU_SW1_END_OF_FILE_BEFORE_REACHED_LE_uint8_tS 0x62
+#define R_APDU_SW2_END_OF_FILE_BEFORE_REACHED_LE_uint8_tS 0x82
 
 // ISO7816-4 commands
 #define ISO7816_SELECT_FILE 0xA4
@@ -93,12 +93,12 @@ bool EmulateTag::emulate(const uint16_t tgInitAsTargetTimeout)
 
       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // NFCID3t
 
-      0, // length of general bytes
-      0  // length of historical bytes
+      0, // length of general uint8_ts
+      0  // length of historical uint8_ts
   };
 
   if (uidPtr != 0)
-  { // if uid is set copy 3 bytes to nfcid1
+  { // if uid is set copy 3 uint8_ts to nfcid1
     memcpy(command + 4, uidPtr, 3);
   }
 
@@ -132,7 +132,7 @@ bool EmulateTag::emulate(const uint16_t tgInitAsTargetTimeout)
   uint8_t sendlen;
   int16_t status;
   tag_file currentFile = NONE;
-  uint16_t cc_size = sizeof(compatibility_container);
+  // uint16_t cc_size = sizeof(compatibility_container);
   bool runLoop = true;
 
   while (runLoop)
@@ -201,7 +201,7 @@ bool EmulateTag::emulate(const uint16_t tgInitAsTargetTimeout)
       case CC:
         if (p1p2_length > NDEF_MAX_LENGTH)
         {
-          setResponse(END_OF_FILE_BEFORE_REACHED_LE_BYTES, rwbuf, &sendlen);
+          setResponse(END_OF_FILE_BEFORE_REACHED_LE_uint8_tS, rwbuf, &sendlen);
         }
         else
         {
@@ -212,7 +212,7 @@ bool EmulateTag::emulate(const uint16_t tgInitAsTargetTimeout)
       case NDEF:
         if (p1p2_length > NDEF_MAX_LENGTH)
         {
-          setResponse(END_OF_FILE_BEFORE_REACHED_LE_BYTES, rwbuf, &sendlen);
+          setResponse(END_OF_FILE_BEFORE_REACHED_LE_uint8_tS, rwbuf, &sendlen);
         }
         else
         {
@@ -289,9 +289,9 @@ void EmulateTag::setResponse(responseCommand cmd, uint8_t *buf, uint8_t *sendlen
     buf[1] = R_APDU_SW2_MEMORY_FAILURE;
     *sendlen = 2;
     break;
-  case END_OF_FILE_BEFORE_REACHED_LE_BYTES:
-    buf[0] = R_APDU_SW1_END_OF_FILE_BEFORE_REACHED_LE_BYTES;
-    buf[1] = R_APDU_SW2_END_OF_FILE_BEFORE_REACHED_LE_BYTES;
+  case END_OF_FILE_BEFORE_REACHED_LE_uint8_tS:
+    buf[0] = R_APDU_SW1_END_OF_FILE_BEFORE_REACHED_LE_uint8_tS;
+    buf[1] = R_APDU_SW2_END_OF_FILE_BEFORE_REACHED_LE_uint8_tS;
     *sendlen = 2;
     break;
   }

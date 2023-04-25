@@ -21,7 +21,7 @@ public:
     int8_t activateAsTarget(uint16_t timeout = 0);
 
     /**
-    * @brief    write a PDU packet, the packet should be less than (255 - 2) bytes
+    * @brief    write a PDU packet, the packet should be less than (255 - 2) uint8_ts
     * @param    header  packet header
     * @param    hlen    length of header
     * @param 	body	packet body
@@ -32,7 +32,7 @@ public:
     bool write(const uint8_t *header, uint8_t hlen, const uint8_t *body = 0, uint8_t blen = 0);
 
     /**
-    * @brief    read a PDU packet, the packet will be less than (255 - 2) bytes
+    * @brief    read a PDU packet, the packet will be less than (255 - 2) uint8_ts
     * @param    buf     the buffer to contain the PDU packet
     * @param    len     lenght of the buffer
     * @return   >=0     length of the PDU packet 

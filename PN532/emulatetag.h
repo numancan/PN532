@@ -20,7 +20,7 @@ typedef enum
   TAG_NOT_FOUND,
   FUNCTION_NOT_SUPPORTED,
   MEMORY_FAILURE,
-  END_OF_FILE_BEFORE_REACHED_LE_BYTES
+  END_OF_FILE_BEFORE_REACHED_LE_uint8_tS
 } responseCommand;
 
 class EmulateTag
@@ -34,7 +34,7 @@ public:
   bool emulate(const uint16_t tgInitAsTargetTimeout = 0);
 
   /*
-   * @param uid pointer to byte array of length 3 (uid is 4 bytes - first byte is fixed) or zero for uid 
+   * @param uid pointer to uint8_t array of length 3 (uid is 4 uint8_ts - first uint8_t is fixed) or zero for uid 
    */
   void setUid(uint8_t *uid = 0);
 
@@ -42,7 +42,7 @@ public:
 
   void getContent(uint8_t **buf, uint16_t *length)
   {
-    *buf = ndef_file + 2; // first 2 bytes = length
+    *buf = ndef_file + 2; // first 2 uint8_ts = length
     *length = (ndef_file[0] << 8) + ndef_file[1];
   }
 

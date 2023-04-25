@@ -51,7 +51,7 @@ void setup(void)
   if (!versiondata)
   {
     Serial.print("Didn't find PN53x board");
-    while (1) {delay(10);};      // halt
+    while (1) {sleep_ms(10);};      // halt
   }
 
   // Got ok data, print it out!
@@ -85,14 +85,14 @@ void loop(void)
   if (ret != 1)
   {
     Serial.println("Could not find a card");
-    delay(500);
+    sleep_ms(500);
     return;
   }
 
   if ( memcmp(idm, _prevIDm, 8) == 0 ) {
     if ( (millis() - _prevTime) < 3000 ) {
       Serial.println("Same card");
-      delay(500);
+      sleep_ms(500);
       return;
     }
   }
@@ -111,5 +111,5 @@ void loop(void)
 
   // Wait 1 second before continuing
   Serial.println("Card access completed!\n");
-  delay(1000);
+  sleep_ms(1000);
 }

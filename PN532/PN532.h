@@ -38,7 +38,7 @@
 #define PN532_COMMAND_INSELECT              (0x54)
 #define PN532_COMMAND_INAUTOPOLL            (0x60)
 #define PN532_COMMAND_TGINITASTARGET        (0x8C)
-#define PN532_COMMAND_TGSETGENERALBYTES     (0x92)
+#define PN532_COMMAND_TGSETGENERALuint8_tS     (0x92)
 #define PN532_COMMAND_TGGETDATA             (0x86)
 #define PN532_COMMAND_TGSETDATA             (0x8E)
 #define PN532_COMMAND_TGSETMETADATA         (0x94)
@@ -188,8 +188,8 @@ public:
     int8_t felica_Release();
 
     // Help functions to display formatted text
-    static void PrintHex(const uint8_t *data, const uint32_t numBytes);
-    static void PrintHexChar(const uint8_t *pbtData, const uint32_t numBytes);
+    static void PrintHex(const uint8_t *data, const uint32_t numuint8_ts);
+    static void PrintHexChar(const uint8_t *pbtData, const uint32_t numuint8_ts);
 
     uint8_t *getBuffer(uint8_t *len) {
         *len = sizeof(pn532_packetbuffer) - 4;

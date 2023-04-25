@@ -57,7 +57,7 @@ void loop(void) {
     int capacity = buf[2] * 8;
     Serial.print(F("Tag capacity "));
     Serial.print(capacity);
-    Serial.println(F(" bytes"));
+    Serial.println(F(" uint8_ts"));
 
     for (int i=4; i<capacity/4; i++) {
         nfc.mifareultralight_ReadPage(i, buf);

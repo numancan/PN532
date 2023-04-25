@@ -46,7 +46,7 @@ void setup()
   // comment out this command for no ndef message
   nfc.setNdefFile(ndefBuf, messageSize);
 
-  // uid must be 3 bytes!
+  // uid must be 3 uint8_ts!
   nfc.setUid(uid);
 
   nfc.init();
@@ -79,5 +79,5 @@ void loop()
     msg.print();
   }
 
-  delay(1000);
+  sleep_ms(1000);
 }

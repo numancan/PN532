@@ -20,7 +20,7 @@ public:
 	};
 
 	/**
-    * @brief    write a SNEP packet, the packet should be less than (255 - 2 - 3) bytes
+    * @brief    write a SNEP packet, the packet should be less than (255 - 2 - 3) uint8_ts
     * @param    buf     the buffer to contain the packet
     * @param    len     lenght of the buffer
     * @param    timeout max time to wait, 0 means no timeout
@@ -31,7 +31,7 @@ public:
     int8_t write(const uint8_t *buf, uint8_t len, uint16_t timeout = 0);
 
     /**
-    * @brief    read a SNEP packet, the packet will be less than (255 - 2 - 3) bytes
+    * @brief    read a SNEP packet, the packet will be less than (255 - 2 - 3) uint8_ts
     * @param    buf     the buffer to contain the packet
     * @param    len     lenght of the buffer
     * @param    timeout max time to wait, 0 means no timeout

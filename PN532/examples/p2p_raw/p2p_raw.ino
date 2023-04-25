@@ -26,7 +26,7 @@ void loop()
 {
 
     nfc.write(message, sizeof(message));
-    delay(3000);
+    sleep_ms(3000);
 
     int16_t len = nfc.read(buf, sizeof(buf));
     if (len > 0) {
@@ -46,5 +46,5 @@ void loop()
       }
       Serial.print('\n');
     }
-    delay(3000);
+    sleep_ms(3000);
 }

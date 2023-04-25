@@ -58,7 +58,7 @@ void setup(void) {
 void loop(void) {
   uint8_t success;                          // Flag to check if there was an error with the PN532
   uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };  // Buffer to store the returned UID
-  uint8_t uidLength;                        // Length of the UID (4 or 7 bytes depending on ISO14443A card type)
+  uint8_t uidLength;                        // Length of the UID (4 or 7 uint8_ts depending on ISO14443A card type)
   uint8_t currentblock;                     // Counter to keep track of which block we're on
   bool authenticated = false;               // Flag to indicate if the sector is authenticated
   uint8_t data[16];                         // Array to store block data during reads
@@ -68,13 +68,13 @@ void loop(void) {
 
   // Wait for an ISO14443A type cards (Mifare, etc.).  When one is found
   // 'uid' will be populated with the UID, and uidLength will indicate
-  // if the uid is 4 bytes (Mifare Classic) or 7 bytes (Mifare Ultralight)
+  // if the uid is 4 uint8_ts (Mifare Classic) or 7 uint8_ts (Mifare Ultralight)
   success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
 
   if (success) {
     // Display some basic information about the card
     Serial.println("Found an ISO14443A card");
-    Serial.print("  UID Length: ");Serial.print(uidLength, DEC);Serial.println(" bytes");
+    Serial.print("  UID Length: ");Serial.print(uidLength, DEC);Serial.println(" uint8_ts");
     Serial.print("  UID Value: ");
     for (uint8_t i = 0; i < uidLength; i++) {
       Serial.print(uid[i], HEX);
@@ -85,7 +85,7 @@ void loop(void) {
     if (uidLength == 4)
     {
       // We probably have a Mifare Classic card ...
-      Serial.println("Seems to be a Mifare Classic card (4 byte UID)");
+      Serial.println("Seems to be a Mifare Classic card (4 uint8_t UID)");
 
       // Now we try to go through all 16 sectors (each having 4 blocks)
       // authenticating each sector, and then dumping the blocks
